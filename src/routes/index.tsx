@@ -91,7 +91,7 @@ function Hero() {
       </div>
       <div className="mx-auto max-w-7xl px-5 lg:px-10 pt-32 pb-20 w-full">
         <p className="text-[var(--gold)] text-xs tracking-[0.35em] uppercase mb-6 reveal">პრემიუმ ავტო დეტეილინგი · თბილისი</p>
-        <h1 className="text-5xl sm:text-6xl lg:text-8xl leading-[1.05] max-w-4xl font-medium reveal">
+        <h1 className="text-[2.5rem] sm:text-6xl lg:text-8xl leading-[1.05] max-w-4xl font-medium reveal break-words hyphens-auto">
           სრულყოფილება <br /><span className="text-[var(--gold)] italic">ყველა</span> დეტალში
         </h1>
         <p className="mt-8 max-w-xl text-lg text-[var(--muted-foreground)] leading-relaxed reveal">
