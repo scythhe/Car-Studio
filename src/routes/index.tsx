@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Menu, X, Phone, MapPin, Clock, MessageCircle, Image as ImageIcon, Star, ArrowRight } from "lucide-react";
+import { Menu, X, Phone, MapPin, Clock, MessageCircle, Star, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/")({ component: Index });
 
 const PHONE_DISPLAY = "598 88 88 79";
 const PHONE_TEL = "+995598888879";
 const WHATSAPP = "https://wa.me/995598888879";
+const GOOGLE_CALENDAR_BOOKING = "https://calendar.app.google/7Tbj2EA19TbJjZUJ6";
 
 const NAV = [
   { href: "#hero", label: "მთავარი" },
@@ -41,7 +42,7 @@ function Nav() {
       <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0A0A0B]/95 backdrop-blur-sm hairline-b py-3" : "bg-transparent py-5"}`}>
         <div className="mx-auto max-w-7xl px-5 lg:px-10 flex items-center justify-between">
           <a href="#hero" className="flex flex-col leading-none">
-            <span className="text-[var(--foreground)] text-lg lg:text-xl font-medium tracking-[0.25em] uppercase">Shadow Line</span>
+            <span className="text-[var(--foreground)] text-lg lg:text-xl font-medium tracking-[0.25em] uppercase">Car Studio</span>
             <span className="text-[10px] tracking-[0.4em] text-[var(--gold)] mt-1">DETAILING</span>
           </a>
           <nav className="hidden lg:flex items-center gap-8">
@@ -56,7 +57,7 @@ function Nav() {
       {open && (
         <div className="fixed inset-0 z-[60] bg-[#0A0A0B] flex flex-col">
           <div className="flex items-center justify-between px-5 py-5 hairline-b">
-            <span className="text-lg tracking-[0.25em] uppercase">Shadow Line</span>
+            <span className="text-lg tracking-[0.25em] uppercase">Car Studio</span>
             <button onClick={() => setOpen(false)} aria-label="Close"><X size={26} /></button>
           </div>
           <nav className="flex flex-col p-8 gap-6">
@@ -79,17 +80,23 @@ function Hero() {
     return () => window.removeEventListener("scroll", on);
   }, []);
   return (
-    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
+    <section id="hero" className="relative isolate min-h-screen flex items-center overflow-hidden">
       <div ref={bgRef} className="absolute inset-0 -z-10 will-change-transform">
-        <img
-          src="https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=2000&q=80"
-          alt="Dark glossy car reflection"
-          className="h-full w-full object-cover"
-          loading="eager"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[#0A0A0B]" />
+        <video
+          className="h-full w-full object-cover brightness-125 contrast-105"
+          poster="https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=2000&q=80"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        >
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+        {/* მსუბუქი მუქი ფენა მხოლოდ ტექსტის კონტრასტისთვის — ვიდეო კარგად უნდა ჩანდეს */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/35 to-black/55" />
       </div>
-      <div className="mx-auto max-w-7xl px-5 lg:px-10 pt-32 pb-20 w-full">
+      <div className="mx-auto max-w-7xl px-5 lg:px-10 pt-32 pb-20 w-full [text-shadow:0_2px_16px_rgba(0,0,0,0.55)]">
         <p className="text-[var(--gold)] text-xs tracking-[0.35em] uppercase mb-6 reveal">პრემიუმ ავტო დეტეილინგი · თბილისი</p>
         <h1 className="text-[2.5rem] sm:text-6xl lg:text-8xl leading-[1.05] max-w-4xl font-medium reveal break-words hyphens-auto">
           სრულყოფილება <br /><span className="text-[var(--gold)] italic">ყველა</span> დეტალში
@@ -121,18 +128,17 @@ const SERVICES = [
   { title: "კერამიკული დაფარვა", desc: "გრძელვადიანი დაცვა, ჰიდროფობული ეფექტი და ბრჭყვიალა ზედაპირი წლების განმავლობაში.", img: "https://images.unsplash.com/photo-1600661653561-629509216228?w=1400&q=80" },
   { title: "სალონის დეტეილინგი", desc: "ღრმა ქიმწმენდა, ტყავის მოვლა და სრული დეზინფექცია — სალონი, როგორც ახალი.", img: "https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=1400&q=80" },
   { title: "მინების ტონირება", desc: "ხარისხიანი ტონირება კომფორტისა და დაცვისთვის, ზუსტი მორგებით.", img: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1400&q=80" },
-  { title: "სრული დეტეილინგი", desc: "გარე და შიდა სრული აღდგენა ერთ პაკეტში.", img: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1400&q=80" },
 ];
 
 function Services() {
   return (
-    <section id="services" className="py-24 lg:py-40 hairline-t">
+    <section id="services" className="py-16 lg:py-24 hairline-t">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="mb-20 max-w-2xl reveal">
+        <div className="mb-10 lg:mb-14 max-w-2xl reveal">
           <p className="text-[var(--gold)] text-xs tracking-[0.35em] uppercase mb-4">01 · სერვისები</p>
           <h2 className="text-4xl lg:text-6xl">ჩვენი სერვისები</h2>
         </div>
-        <div className="space-y-24 lg:space-y-32">
+        <div className="space-y-16 lg:space-y-24">
           {SERVICES.map((s, i) => (
             <div key={s.title} className={`grid lg:grid-cols-2 gap-10 lg:gap-20 items-center reveal ${i % 2 === 1 ? "lg:[&>div:first-child]:order-2" : ""}`}>
               <div className="aspect-[4/3] overflow-hidden">
@@ -154,16 +160,7 @@ function Services() {
   );
 }
 
-function PlaceholderFrame({ label }: { label: string }) {
-  return (
-    <div className="w-full h-full bg-[#141416] gold-border flex flex-col items-center justify-center gap-3 select-none">
-      <ImageIcon size={32} className="text-[var(--gold)]/60" strokeWidth={1} />
-      <span className="text-xs tracking-[0.3em] uppercase text-[var(--muted-foreground)]">{label}</span>
-    </div>
-  );
-}
-
-function BeforeAfterSlider() {
+function BeforeAfterSlider({ img }: { img: string }) {
   const [pos, setPos] = useState(50);
   const ref = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
@@ -194,53 +191,62 @@ function BeforeAfterSlider() {
   return (
     <div
       ref={ref}
-      className="relative aspect-[4/3] w-full overflow-hidden cursor-ew-resize select-none"
+      className="relative aspect-[3/4] sm:aspect-[4/3] w-full overflow-hidden cursor-ew-resize select-none gold-border"
       onMouseDown={(e) => { dragging.current = true; move(e.clientX); }}
       onTouchStart={(e) => { dragging.current = true; move(e.touches[0].clientX); }}
     >
-      <div className="absolute inset-0"><PlaceholderFrame label="შემდეგ" /></div>
+      {/* შემდეგ — სრული ფერი */}
+      <div className="absolute inset-0">
+        <img src={img} alt="შემდეგ" className="w-full h-full object-cover" loading="lazy" draggable={false} />
+        <span className="absolute bottom-2 right-2 bg-[var(--gold)] text-black text-[9px] sm:text-[10px] tracking-[0.2em] uppercase px-1.5 py-0.5">შემდეგ</span>
+      </div>
+      {/* მანამდე — დამუქებული/გაუფერულებული ფენა */}
       <div className="absolute inset-0 overflow-hidden" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
-        <PlaceholderFrame label="მანამდე" />
+        <img src={img} alt="მანამდე" className="w-full h-full object-cover grayscale brightness-[.65] contrast-90" loading="lazy" draggable={false} />
+        <span className="absolute bottom-2 left-2 bg-black/70 text-[var(--foreground)] text-[9px] sm:text-[10px] tracking-[0.2em] uppercase px-1.5 py-0.5">მანამდე</span>
       </div>
       <div className="absolute top-0 bottom-0 w-px bg-[var(--gold)] pointer-events-none" style={{ left: `${pos}%` }}>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-[var(--gold)] flex items-center justify-center text-black text-xs">⇔</div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-7 h-7 sm:w-10 sm:h-10 bg-[var(--gold)] flex items-center justify-center text-black text-xs">⇔</div>
       </div>
     </div>
   );
 }
 
+const WORK = [
+  "https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=1000&q=80",
+  "https://images.unsplash.com/photo-1600661653561-629509216228?w=1000&q=80",
+  "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1000&q=80",
+];
+
 function BeforeAfter() {
   return (
-    <section id="work" className="py-24 lg:py-40 hairline-t bg-[#0c0c0d]">
+    <section id="work" className="py-16 lg:py-24 hairline-t bg-[#0c0c0d]">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="mb-16 max-w-2xl reveal">
+        <div className="mb-10 lg:mb-14 max-w-2xl reveal">
           <p className="text-[var(--gold)] text-xs tracking-[0.35em] uppercase mb-4">02 · ნამუშევრები</p>
           <h2 className="text-4xl lg:text-6xl">ნახე განსხვავება</h2>
           <p className="mt-6 text-[var(--muted-foreground)] text-lg">გადაათრიე სახელური და ნახე ტრანსფორმაცია.</p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 reveal">
-          {[1, 2, 3].map((i) => <BeforeAfterSlider key={i} />)}
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:gap-6 reveal">
+          {WORK.map((img) => <BeforeAfterSlider key={img} img={img} />)}
         </div>
-        <p className="mt-8 text-xs text-[var(--muted-foreground)] tracking-wider">დემო — ჩაანაცვლეთ თქვენი რეალური ფოტოებით.</p>
       </div>
     </section>
   );
 }
 
 const WHY = [
-  { n: "01", t: "5.0 რეიტინგი, 25 რეალური შეფასება" },
-  { n: "02", t: "ვხსნით და გაჩვენებთ ლაქის რეალურ მდგომარეობას" },
-  { n: "03", t: "დროული ჩაბარება, ზუსტად შეთანხმებულ დროს" },
-  { n: "04", t: "ხარისხის გარანტია ყველა სამუშაოზე" },
+  { n: "01", t: "5.0 რეიტინგი Google-ზე, 25 რეალურ შეფასებაზე დაფუძნებული — ნდობა, რომელსაც ყოველ ვიზიტზე ვამართლებთ." },
+  { n: "02", t: "სრული გამჭვირვალობა და ხარისხის გარანტია — გაჩვენებთ ლაქის რეალურ მდგომარეობას და ვასრულებთ ზუსტად შეთანხმებულ დროს." },
 ];
 
 function WhyUs() {
   return (
-    <section className="py-24 lg:py-40 hairline-t">
+    <section className="py-16 lg:py-24 hairline-t">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="mb-16 max-w-2xl reveal">
+        <div className="mb-10 lg:mb-14 max-w-2xl reveal">
           <p className="text-[var(--gold)] text-xs tracking-[0.35em] uppercase mb-4">03 · უპირატესობა</p>
-          <h2 className="text-4xl lg:text-6xl">რატომ Shadow Line</h2>
+          <h2 className="text-4xl lg:text-6xl">რატომ Car Studio</h2>
         </div>
         <div className="grid md:grid-cols-2 gap-px bg-[var(--hairline)] reveal">
           {WHY.map((w) => (
@@ -265,9 +271,9 @@ const REVIEWS = [
 
 function Reviews() {
   return (
-    <section id="reviews" className="py-24 lg:py-40 hairline-t bg-[#0c0c0d]">
+    <section id="reviews" className="py-16 lg:py-24 hairline-t bg-[#0c0c0d]">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="mb-16 reveal">
+        <div className="mb-10 lg:mb-14 reveal">
           <p className="text-[var(--gold)] text-xs tracking-[0.35em] uppercase mb-4">04 · შეფასებები</p>
           <h2 className="text-4xl lg:text-6xl mb-8">რას ამბობენ კლიენტები</h2>
           <div className="flex items-center gap-4">
@@ -304,9 +310,9 @@ const PACKAGES = [
 
 function Pricing() {
   return (
-    <section id="pricing" className="py-24 lg:py-40 hairline-t">
+    <section id="pricing" className="py-16 lg:py-24 hairline-t">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="mb-16 max-w-2xl reveal">
+        <div className="mb-10 lg:mb-14 max-w-2xl reveal">
           <p className="text-[var(--gold)] text-xs tracking-[0.35em] uppercase mb-4">05 · პაკეტები</p>
           <h2 className="text-4xl lg:text-6xl">პაკეტები</h2>
         </div>
@@ -334,12 +340,14 @@ function Pricing() {
   );
 }
 
+const HOURS = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+
 function Booking() {
   const [sent, setSent] = useState(false);
   return (
-    <section id="contact" className="py-24 lg:py-40 hairline-t bg-[#0c0c0d]">
+    <section id="contact" className="py-16 lg:py-24 hairline-t bg-[#0c0c0d]">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
-        <div className="mb-16 max-w-2xl reveal">
+        <div className="mb-10 lg:mb-14 max-w-2xl reveal">
           <p className="text-[var(--gold)] text-xs tracking-[0.35em] uppercase mb-4">06 · დაჯავშნა</p>
           <h2 className="text-4xl lg:text-6xl">დაჯავშნე ვიზიტი</h2>
         </div>
@@ -369,9 +377,18 @@ function Booking() {
                     {SERVICES.map((s) => <option key={s.title} className="bg-[#141416]">{s.title}</option>)}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-xs tracking-[0.25em] uppercase text-[var(--muted-foreground)] mb-2">სასურველი თარიღი</label>
-                  <input required type="date" className="w-full bg-transparent border-b border-[var(--hairline)] py-3 focus:border-[var(--gold)] outline-none text-lg [color-scheme:dark]" />
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs tracking-[0.25em] uppercase text-[var(--muted-foreground)] mb-2">სასურველი თარიღი</label>
+                    <input required type="date" className="w-full bg-transparent border-b border-[var(--hairline)] py-3 focus:border-[var(--gold)] outline-none text-lg [color-scheme:dark]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs tracking-[0.25em] uppercase text-[var(--muted-foreground)] mb-2">სასურველი საათი</label>
+                    <select required defaultValue="" className="w-full bg-transparent border-b border-[var(--hairline)] py-3 focus:border-[var(--gold)] outline-none text-lg">
+                      <option value="" disabled className="bg-[#141416]">აირჩიე...</option>
+                      {HOURS.map((h) => <option key={h} className="bg-[#141416]">{h}</option>)}
+                    </select>
+                  </div>
                 </div>
                 <button type="submit" className="w-full mt-4 bg-[var(--gold)] text-black py-4 text-sm tracking-[0.3em] uppercase hover:bg-[#b8955a] transition">
                   გაგზავნა
@@ -431,7 +448,7 @@ function Footer() {
       <div className="mx-auto max-w-7xl px-5 lg:px-10 grid md:grid-cols-3 gap-12">
         <div>
           <div className="flex flex-col leading-none mb-4">
-            <span className="text-xl tracking-[0.25em] uppercase">Shadow Line</span>
+            <span className="text-xl tracking-[0.25em] uppercase">Car Studio</span>
             <span className="text-[10px] tracking-[0.4em] text-[var(--gold)] mt-1">DETAILING</span>
           </div>
           <p className="text-[var(--muted-foreground)] text-sm">პრემიუმ ავტო დეტეილინგი თბილისში.</p>
@@ -452,7 +469,7 @@ function Footer() {
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-5 lg:px-10 mt-12 pt-8 hairline-t">
-        <p className="text-xs text-[var(--muted-foreground)] tracking-wider">© Shadow Line Detailing</p>
+        <p className="text-xs text-[var(--muted-foreground)] tracking-wider">© Car Studio Detailing</p>
       </div>
     </footer>
   );
