@@ -7,7 +7,8 @@ export const Route = createFileRoute("/")({ component: Index });
 const PHONE_DISPLAY = "598 88 88 79";
 const PHONE_TEL = "+995598888879";
 const WHATSAPP = "https://wa.me/995598888879";
-const GOOGLE_CALENDAR_BOOKING = "https://calendar.app.google/7Tbj2EA19TbJjZUJ6";
+const TIDYCAL_PATH = "nikolozberdznishvili1/60-minute-meeting";
+const TIDYCAL_EMBED_SRC = "https://asset-tidycal.b-cdn.net/js/embed.js";
 
 const NAV = [
   { href: "#hero", label: "მთავარი" },
@@ -340,10 +341,18 @@ function Pricing() {
   );
 }
 
-const HOURS = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+function useTidyCalEmbed() {
+  useEffect(() => {
+    if (document.querySelector(`script[src="${TIDYCAL_EMBED_SRC}"]`)) return;
+    const script = document.createElement("script");
+    script.src = TIDYCAL_EMBED_SRC;
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+}
 
 function Booking() {
-  const [sent, setSent] = useState(false);
+  useTidyCalEmbed();
   return (
     <section id="contact" className="py-16 lg:py-24 hairline-t bg-[#0c0c0d]">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
@@ -352,50 +361,9 @@ function Booking() {
           <h2 className="text-4xl lg:text-6xl">დაჯავშნე ვიზიტი</h2>
         </div>
         <div className="grid lg:grid-cols-2 gap-16 reveal">
-          <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="space-y-6">
-            {sent ? (
-              <div className="border border-[var(--gold)] p-10 text-center">
-                <p className="text-2xl font-serif-ge mb-2">მადლობა!</p>
-                <p className="text-[var(--muted-foreground)]">მალე დაგიკავშირდებით.</p>
-              </div>
-            ) : (
-              <>
-                {[
-                  { l: "სახელი", t: "text", name: "name" },
-                  { l: "ტელეფონი", t: "tel", name: "phone" },
-                  { l: "ავტომობილის მოდელი", t: "text", name: "model" },
-                ].map((f) => (
-                  <div key={f.name}>
-                    <label className="block text-xs tracking-[0.25em] uppercase text-[var(--muted-foreground)] mb-2">{f.l}</label>
-                    <input required type={f.t} name={f.name} className="w-full bg-transparent border-b border-[var(--hairline)] py-3 focus:border-[var(--gold)] outline-none transition text-lg" />
-                  </div>
-                ))}
-                <div>
-                  <label className="block text-xs tracking-[0.25em] uppercase text-[var(--muted-foreground)] mb-2">სასურველი სერვისი</label>
-                  <select required className="w-full bg-transparent border-b border-[var(--hairline)] py-3 focus:border-[var(--gold)] outline-none text-lg">
-                    <option value="" className="bg-[#141416]">აირჩიე...</option>
-                    {SERVICES.map((s) => <option key={s.title} className="bg-[#141416]">{s.title}</option>)}
-                  </select>
-                </div>
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs tracking-[0.25em] uppercase text-[var(--muted-foreground)] mb-2">სასურველი თარიღი</label>
-                    <input required type="date" className="w-full bg-transparent border-b border-[var(--hairline)] py-3 focus:border-[var(--gold)] outline-none text-lg [color-scheme:dark]" />
-                  </div>
-                  <div>
-                    <label className="block text-xs tracking-[0.25em] uppercase text-[var(--muted-foreground)] mb-2">სასურველი საათი</label>
-                    <select required defaultValue="" className="w-full bg-transparent border-b border-[var(--hairline)] py-3 focus:border-[var(--gold)] outline-none text-lg">
-                      <option value="" disabled className="bg-[#141416]">აირჩიე...</option>
-                      {HOURS.map((h) => <option key={h} className="bg-[#141416]">{h}</option>)}
-                    </select>
-                  </div>
-                </div>
-                <button type="submit" className="w-full mt-4 bg-[var(--gold)] text-black py-4 text-sm tracking-[0.3em] uppercase hover:bg-[#b8955a] transition">
-                  გაგზავნა
-                </button>
-              </>
-            )}
-          </form>
+          <div className="gold-border p-px w-full self-start">
+            <div className="tidycal-embed w-full" data-path={TIDYCAL_PATH} />
+          </div>
           <div className="space-y-8">
             <div className="space-y-6">
               <div className="flex gap-4">
