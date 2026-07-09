@@ -4,11 +4,9 @@ import { Menu, X, Phone, MapPin, Clock, MessageCircle, Star, ArrowRight } from "
 
 export const Route = createFileRoute("/")({ component: Index });
 
-const PHONE_DISPLAY = "598 88 88 79";
-const PHONE_TEL = "+995598888879";
-const WHATSAPP = "https://wa.me/995598888879";
-const TIDYCAL_PATH = "nikolozberdznishvili1/60-minute-meeting";
-const TIDYCAL_EMBED_SRC = "https://asset-tidycal.b-cdn.net/js/embed.js";
+const PHONE_DISPLAY = "599 14 82 42";
+const PHONE_TEL = "+995599148242";
+const WHATSAPP = "https://wa.me/995599148242";
 
 const NAV = [
   { href: "#hero", label: "მთავარი" },
@@ -341,18 +339,66 @@ function Pricing() {
   );
 }
 
-function useTidyCalEmbed() {
-  useEffect(() => {
-    if (document.querySelector(`script[src="${TIDYCAL_EMBED_SRC}"]`)) return;
-    const script = document.createElement("script");
-    script.src = TIDYCAL_EMBED_SRC;
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
+const DAY_ABBR = ["კვ", "ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ"];
+const MOCK_TIMES = ["10:00", "11:00", "12:00", "13:30", "15:00", "16:00", "17:30", "18:30"];
+
+function MockCalendar() {
+  const days = [...Array(6)].map((_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() + i);
+    return { label: DAY_ABBR[d.getDay()], num: d.getDate() };
+  });
+  const [selectedDay, setSelectedDay] = useState(0);
+  const [selectedTime, setSelectedTime] = useState(MOCK_TIMES[2]);
+
+  return (
+    <div className="gold-border p-8 lg:p-10 w-full self-start">
+      <div className="flex items-center gap-4 mb-8 pb-8 hairline-b">
+        <div className="w-14 h-14 rounded-full bg-[var(--gold)] text-black flex items-center justify-center text-lg font-serif-ge shrink-0">ნბ</div>
+        <div>
+          <p className="text-lg font-serif-ge leading-tight">Nika Berdznishvili</p>
+          <p className="text-sm text-[var(--muted-foreground)]">დეტეილინგის სპეციალისტი · 60 წუთიანი ვიზიტი</p>
+        </div>
+      </div>
+      <p className="text-xs tracking-[0.25em] uppercase text-[var(--muted-foreground)] mb-4">აირჩიე თარიღი</p>
+      <div className="grid grid-cols-6 gap-2 mb-8">
+        {days.map((d, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => setSelectedDay(i)}
+            className={`flex flex-col items-center py-3 border transition ${i === selectedDay ? "border-[var(--gold)] bg-[var(--gold)] text-black" : "border-[var(--hairline)] hover:border-[var(--gold)]"}`}
+          >
+            <span className="text-[10px] uppercase tracking-wider">{d.label}</span>
+            <span className="text-lg font-serif-ge">{d.num}</span>
+          </button>
+        ))}
+      </div>
+      <p className="text-xs tracking-[0.25em] uppercase text-[var(--muted-foreground)] mb-4">აირჩიე დრო</p>
+      <div className="grid grid-cols-4 gap-2 mb-8">
+        {MOCK_TIMES.map((t) => (
+          <button
+            key={t}
+            type="button"
+            onClick={() => setSelectedTime(t)}
+            className={`py-3 text-sm border transition ${t === selectedTime ? "border-[var(--gold)] bg-[var(--gold)] text-black" : "border-[var(--hairline)] hover:border-[var(--gold)]"}`}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={(e) => e.preventDefault()}
+        className="w-full bg-[var(--gold)] text-black py-4 text-sm tracking-[0.3em] uppercase hover:bg-[#b8955a] transition"
+      >
+        დაჯავშნა
+      </button>
+    </div>
+  );
 }
 
 function Booking() {
-  useTidyCalEmbed();
   return (
     <section id="contact" className="py-16 lg:py-24 hairline-t bg-[#0c0c0d]">
       <div className="mx-auto max-w-7xl px-5 lg:px-10">
@@ -361,9 +407,7 @@ function Booking() {
           <h2 className="text-4xl lg:text-6xl">დაჯავშნე ვიზიტი</h2>
         </div>
         <div className="grid lg:grid-cols-2 gap-16 reveal">
-          <div className="gold-border p-px w-full self-start">
-            <div className="tidycal-embed w-full" data-path={TIDYCAL_PATH} />
-          </div>
+          <MockCalendar />
           <div className="space-y-8">
             <div className="space-y-6">
               <div className="flex gap-4">
