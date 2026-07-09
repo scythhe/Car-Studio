@@ -30,8 +30,8 @@
   --color-gold: var(--gold);
   --color-charcoal: var(--charcoal);
   --color-hairline: var(--hairline);
-  --font-serif-ge: "Noto Serif Georgian", serif;
-  --font-sans-ge: "Noto Sans Georgian", sans-serif;
+  --font-serif-ge: "Noto Serif Georgian", "Noto Serif", serif;
+  --font-sans-ge: "Noto Sans Georgian", "Noto Sans", sans-serif;
 }
 
 :root {
